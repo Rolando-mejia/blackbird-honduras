@@ -18,9 +18,27 @@ export async function GET(request: NextRequest) {
     if (!error) {
       return NextResponse.redirect(new URL(next, origin));
     }
+
+    return NextResponse.redirect(
+      new URL(
+        `/login?error=${encodeURIComponent(
+          "No pudimos validar el enlace de confirmación. Intenta iniciar sesión.",
+        )}`,
+        origin,
+      ),
+    );
   }
 
+  // Supabase's default confirmation template can verify the email before
+  // redirecting back to the application. In that case this route receives no
+  // token_hash/type. The account may already be confirmed, so do not show a
+  // false confirmation failure.
   return NextResponse.redirect(
-    new URL(`/login?error=${encodeURIComponent("No pudimos confirmar el correo.")}`, origin),
+    new URL(
+      `/login?message=${encodeURIComponent(
+        "Correo confirmado. Inicia sesión para continuar.",
+      )}`,
+      origin,
+    ),
   );
 }
