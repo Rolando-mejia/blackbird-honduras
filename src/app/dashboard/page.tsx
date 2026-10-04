@@ -99,14 +99,44 @@ export default async function DashboardPage() {
           </nav>
         </aside>
 
-        <section className="flex-1 p-5 md:p-10">
+        <section className="min-w-0 flex-1 p-4 sm:p-5 md:p-10">
           <div className="mx-auto max-w-5xl">
+            <div className="mb-5 flex items-center justify-between rounded-2xl bg-neutral-950 px-4 py-3 text-white md:hidden">
+              <div className="font-semibold">
+                Blackbird <span className="text-neutral-500">HN</span>
+              </div>
+
+              <details className="relative">
+                <summary className="flex h-10 w-10 cursor-pointer list-none items-center justify-center rounded-xl bg-white/10 text-xl [&::-webkit-details-marker]:hidden">
+                  ☰
+                </summary>
+                <div className="absolute right-0 z-50 mt-3 w-64 overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-950 p-2 shadow-2xl">
+                  <a href="/dashboard" className="block rounded-xl bg-white px-4 py-3 text-sm font-medium text-black">
+                    Inicio
+                  </a>
+                  {["Empresa", "Sucursales", "Usuarios", "Módulos", "Configuración"].map((item) => (
+                    <div key={item} className="flex items-center justify-between rounded-xl px-4 py-3 text-sm text-neutral-300">
+                      <span>{item}</span>
+                      <span className="text-[10px] uppercase tracking-wide text-neutral-600">Pronto</span>
+                    </div>
+                  ))}
+                  {!data.isDemo ? (
+                    <form action={logout} className="mt-2 border-t border-neutral-800 pt-2">
+                      <button className="w-full rounded-xl px-4 py-3 text-left text-sm text-neutral-300">
+                        Cerrar sesión
+                      </button>
+                    </form>
+                  ) : null}
+                </div>
+              </details>
+            </div>
+
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-sm text-neutral-500">Blackbird Alpha 0.4-dev</p>
                 <h1 className="mt-1 text-3xl font-semibold tracking-tight">Hola, {data.fullName.split(" ")[0]}</h1>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="hidden items-center gap-2 sm:flex">
                 <div className="rounded-full bg-white px-4 py-2 text-sm shadow-sm">HN · HNL</div>
                 {!data.isDemo ? <form action={logout}><button className="rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm">Salir</button></form> : null}
               </div>
