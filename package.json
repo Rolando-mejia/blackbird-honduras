@@ -1,0 +1,40 @@
+{
+  "name": "blackbird-honduras",
+  "version": "0.1.2",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "env:check": "tsx scripts/check-env.ts",
+    "db:generate": "drizzle-kit generate --config drizzle.config.ts",
+    "db:migrate": "drizzle-kit migrate --config drizzle.migrate.config.ts",
+    "db:studio": "drizzle-kit studio --config drizzle.migrate.config.ts"
+  },
+  "dependencies": {
+    "@supabase/ssr": "0.12.7",
+    "@supabase/supabase-js": "2.117.1",
+    "drizzle-orm": "0.45.3",
+    "next": "16.3.8",
+    "pg": "8.23.1",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.3.3",
+    "@types/node": "^24.0.0",
+    "@types/pg": "^8.15.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "dotenv": "18.0.5",
+    "drizzle-kit": "0.31.11",
+    "eslint": "^9.0.0",
+    "eslint-config-next": "16.3.8",
+    "tailwindcss": "4.3.3",
+    "tsx": "^4.20.0",
+    "typescript": "7.0.2"
+  }
+}
