@@ -14,6 +14,15 @@ Flujo principal:
 
 El backend DEV usa Supabase Auth, PostgreSQL y Row Level Security.
 
+## Identificadores del proyecto
+
+- Producto: `Blackbird Honduras`
+- Repositorio GitHub: `Rolando-mejia/blackbird-honduras`
+- Proyecto Vercel DEV: `blackbird-hn-dev`
+- URL DEV esperada: `https://blackbird-hn-dev.vercel.app`
+
+El nombre de Vercel es deliberadamente distinto del nombre del repositorio para separar el entorno DEV del producto.
+
 ## Variables para Vercel
 
 Configure:
@@ -21,6 +30,12 @@ Configure:
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
 - `NEXT_PUBLIC_APP_URL`
+
+Una vez creado el deployment DEV, `NEXT_PUBLIC_APP_URL` debe apuntar a:
+
+`https://blackbird-hn-dev.vercel.app`
+
+Si Vercel asigna otra URL, utilice la URL exacta que Vercel entregue.
 
 No se debe subir `.env.local`, contraseñas de PostgreSQL, `service_role` ni claves secretas.
 
