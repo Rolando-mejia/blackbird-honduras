@@ -1,16 +1,14 @@
 # Blackbird DEV en Vercel
 
-## Nombre del proyecto
+## Proyecto DEV oficial
 
-Use este nombre para el entorno de desarrollo:
+Use el proyecto Vercel:
 
-`blackbird-hn-dev`
+`blackbird-honduras`
 
-La URL esperada será:
+Dominio DEV oficial:
 
-`https://blackbird-hn-dev.vercel.app`
-
-Si Vercel asigna una URL distinta, use la URL exacta del deployment en las variables y en Supabase Auth.
+`https://blackbird-honduras.vercel.app`
 
 ## Variables de entorno
 
@@ -18,16 +16,20 @@ Configure:
 
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
-- `NEXT_PUBLIC_APP_URL`
-
-Después del primer deployment, establezca `NEXT_PUBLIC_APP_URL` con la URL pública real de Vercel.
+- `NEXT_PUBLIC_APP_URL=https://blackbird-honduras.vercel.app`
 
 El runtime actual no requiere contraseña PostgreSQL ni `service_role`.
 
 ## Supabase Auth
 
-Después del primer deployment, agregue la URL pública en:
+En:
 
 Supabase > Authentication > URL Configuration
 
-Esto permitirá confirmación de correo y redirecciones de Auth desde el entorno DEV.
+configure:
+
+- Site URL: `https://blackbird-honduras.vercel.app`
+- Redirect URL: `https://blackbird-honduras.vercel.app/**`
+- Mantenga también `http://localhost:3000/**` para desarrollo local.
+
+Esto permite confirmación de correo y redirecciones de Auth desde DEV y local.
