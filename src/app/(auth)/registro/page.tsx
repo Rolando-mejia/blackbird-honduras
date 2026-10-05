@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { register } from "@/modules/auth/actions";
 import { BlackbirdBrand } from "@/components/blackbird-mark";
+import { RegisterSubmitButton } from "@/components/register-submit-button";
 
 export default async function RegisterPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ error?: string; message?: string }>;
 }) {
   const params = await searchParams;
 
@@ -30,16 +31,49 @@ export default async function RegisterPage({
             <h2 className="mt-3 text-4xl font-black tracking-[-0.045em]">Empieza con tu empresa.</h2>
             <p className="mt-3 text-sm leading-6 text-neutral-500">Tu configuración y datos quedarán listos para seguir trabajando después de la prueba.</p>
 
-            {params.error ? <div className="mt-6 rounded-2xl bg-red-50 px-4 py-3 text-sm font-medium text-red-700">{params.error}</div> : null}
+            {params.error ? (
+              <div className="mt-6 rounded-2xl bg-red-50 px-4 py-3 text-sm font-medium leading-6 text-red-700">
+                {params.error}
+              </div>
+            ) : null}
 
-            <form action={register} className="mt-7 space-y-4">
-              <label className="block text-sm font-semibold">Nombre completo<input name="fullName" autoComplete="name" required className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] px-4 py-3.5" /></label>
-              <label className="block text-sm font-semibold">Correo<input name="email" type="email" autoComplete="email" required className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] px-4 py-3.5" /></label>
-              <label className="block text-sm font-semibold">Contraseña<input name="password" type="password" autoComplete="new-password" minLength={8} required className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] px-4 py-3.5" /></label>
-              <button className="w-full rounded-2xl bg-neutral-950 px-4 py-4 text-sm font-bold text-white hover:bg-neutral-800">Crear cuenta</button>
-            </form>
+            {params.message ? (
+              <div className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-4 text-sm text-emerald-800">
+                <p className="font-bold">Revisa tu correo para verificar tu cuenta</p>
+                <p className="mt-1 leading-6">{params.message}</p>
+              </div>
+            ) : null}
 
-            <p className="mt-6 text-center text-sm text-neutral-500">Ya tengo cuenta. <Link href="/login" className="font-bold text-neutral-950">Iniciar sesión</Link></p>
+            {!params.message ? (
+              <form action={register} className="mt-7 space-y-4">
+                <label className="block text-sm font-semibold">
+                  Nombre completo
+                  <input name="fullName" autoComplete="name" required className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] px-4 py-3.5" />
+                </label>
+                <label className="block text-sm font-semibold">
+                  Correo
+                  <input name="email" type="email" autoComplete="email" required className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] px-4 py-3.5" />
+                </label>
+                <label className="block text-sm font-semibold">
+                  Contraseña
+                  <input name="password" type="password" autoComplete="new-password" minLength={8} required className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] px-4 py-3.5" />
+                </label>
+                <RegisterSubmitButton />
+              </form>
+            ) : (
+              <div className="mt-7">
+                <Link
+                  href="/login"
+                  className="block w-full rounded-2xl bg-neutral-950 px-4 py-4 text-center text-sm font-bold text-white hover:bg-neutral-800"
+                >
+                  Ir a iniciar sesión
+                </Link>
+              </div>
+            )}
+
+            <p className="mt-6 text-center text-sm text-neutral-500">
+              Ya tengo cuenta. <Link href="/login" className="font-bold text-neutral-950">Iniciar sesión</Link>
+            </p>
           </div>
         </section>
       </div>
