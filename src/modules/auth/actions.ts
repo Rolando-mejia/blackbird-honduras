@@ -15,6 +15,10 @@ function fail(path: string, message: string): never {
   redirect(`${path}?error=${encodeURIComponent(message)}`);
 }
 
+function registrationSuccess(message: string): never {
+  redirect(`/registro?message=${encodeURIComponent(message)}`);
+}
+
 export async function login(formData: FormData) {
   if (!isSupabaseConfigured()) {
     fail("/login", "El entorno Supabase DEV todavía no está conectado.");
@@ -66,10 +70,11 @@ export async function register(formData: FormData) {
   }
 
   const requestHeaders = await headers();
-  const origin =
+  const rawOrigin =
     process.env.NEXT_PUBLIC_APP_URL ??
     requestHeaders.get("origin") ??
     "http://localhost:3000";
+  const origin = rawOrigin.replace(/\/+$/, "");
 
   const supabase = await createClient();
   const { data, error } = await supabase.auth.signUp({
@@ -84,6 +89,12 @@ export async function register(formData: FormData) {
   });
 
   if (error) {
+    if (error.code === "over_email_send_rate_limit") {
+      registrationSuccess(
+        "Ya solicitamos un correo de verificación recientemente. Revisa tu bandeja de entrada y correo no deseado para verificar tu cuenta.",
+      );
+    }
+
     fail(
       "/registro",
       "No pudimos crear la cuenta. Revisa los datos e inténtalo nuevamente.",
@@ -94,10 +105,8 @@ export async function register(formData: FormData) {
     redirect("/onboarding");
   }
 
-  redirect(
-    `/login?message=${encodeURIComponent(
-      "Cuenta creada. Revisa tu correo para confirmar el acceso.",
-    )}`,
+  registrationSuccess(
+    "Cuenta creada correctamente. Revisa tu correo electrónico y abre el enlace que te enviamos para verificar tu cuenta y continuar.",
   );
 }
 
