@@ -90,8 +90,9 @@ export async function register(formData: FormData) {
 
   if (error) {
     if (error.code === "over_email_send_rate_limit") {
-      registrationSuccess(
-        "Si este correo corresponde a una cuenta nueva o pendiente de verificación, recibirás un enlace para confirmarla. Si ya habías verificado tu cuenta, puedes iniciar sesión directamente.",
+      fail(
+        "/registro",
+        "No pudimos enviar el correo de verificación en este momento. El servicio de correo alcanzó un límite temporal y la cuenta no fue creada. Espera un poco y vuelve a intentarlo.",
       );
     }
 
