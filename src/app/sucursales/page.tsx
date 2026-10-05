@@ -5,7 +5,7 @@ export default async function SucursalesPage() {
   const ctx = await getActiveContext();
   const { data: branches } = await ctx.supabase
     .from("branches")
-    .select("id,name,code,address,department,municipality,is_main,is_active")
+    .select("id,name,code,address,department,municipality,is_main,is_active,is_virtual")
     .eq("organization_id", ctx.organization.id)
     .order("is_main", { ascending: false })
     .order("name");
@@ -37,7 +37,12 @@ export default async function SucursalesPage() {
                 <p className="text-lg font-black tracking-[-0.025em]">{branch.name}</p>
                 <p className="mt-1 text-xs text-neutral-400">Código {branch.code}</p>
               </div>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap justify-end gap-2">
+                {branch.is_virtual ? (
+                  <span className="rounded-full bg-sky-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-wide text-sky-700">
+                    En línea
+                  </span>
+                ) : null}
                 {branch.is_main ? (
                   <span className="rounded-full bg-[var(--bb-accent-soft)] px-2.5 py-1 text-[10px] font-black uppercase tracking-wide text-[var(--bb-accent-strong)]">
                     Principal
@@ -48,10 +53,20 @@ export default async function SucursalesPage() {
                 </span>
               </div>
             </div>
-            <div className="mt-5 rounded-2xl bg-[var(--bb-soft)] p-4 text-sm">
-              <p className="font-semibold">{[branch.municipality, branch.department].filter(Boolean).join(", ") || "Ubicación pendiente"}</p>
-              <p className="mt-1 text-xs leading-5 text-neutral-500">{branch.address || "Dirección pendiente"}</p>
-            </div>
+
+            {branch.is_virtual ? (
+              <div className="mt-5 rounded-2xl bg-[var(--bb-soft)] p-4 text-sm">
+                <p className="font-semibold">Operación en línea</p>
+                <p className="mt-1 text-xs leading-5 text-neutral-500">
+                  Este negocio no declaró una tienda o local físico para esta ubicación.
+                </p>
+              </div>
+            ) : (
+              <div className="mt-5 rounded-2xl bg-[var(--bb-soft)] p-4 text-sm">
+                <p className="font-semibold">{[branch.municipality, branch.department].filter(Boolean).join(", ") || "Ubicación pendiente"}</p>
+                <p className="mt-1 text-xs leading-5 text-neutral-500">{branch.address || "Dirección pendiente"}</p>
+              </div>
+            )}
           </article>
         ))}
       </div>
