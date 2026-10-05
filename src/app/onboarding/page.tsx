@@ -3,12 +3,13 @@ import { isSupabaseConfigured } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 import { createOrganization } from "@/modules/organizations/actions";
 import { BlackbirdBrand } from "@/components/blackbird-mark";
+import { BusinessLocationFields } from "@/components/business-location-fields";
 
 const departments = [
   "Atlántida", "Choluteca", "Colón", "Comayagua", "Copán", "Cortés", "El Paraíso",
   "Francisco Morazán", "Gracias a Dios", "Intibucá", "Islas de la Bahía", "La Paz",
   "Lempira", "Ocotepeque", "Olancho", "Santa Bárbara", "Valle", "Yoro",
-];
+] as const;
 
 export default async function OnboardingPage({
   searchParams,
@@ -32,12 +33,14 @@ export default async function OnboardingPage({
           <div className="relative z-10 mt-14">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-500">Configuración inicial</p>
             <h1 className="mt-3 text-4xl font-black tracking-[-0.045em]">Configuremos tu primera empresa.</h1>
-            <p className="mt-4 max-w-md text-sm leading-6 text-neutral-400">Empieza por lo esencial. Más adelante Blackbird podrá recomendar módulos y configuraciones según tu rubro.</p>
+            <p className="mt-4 max-w-md text-sm leading-6 text-neutral-400">
+              Empieza por lo esencial. Blackbird se adapta tanto a negocios con local físico como a operaciones completamente en línea.
+            </p>
           </div>
           <div className="relative z-10 mt-10 grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
             {[
               ["01", "Empresa", "Identidad y datos base"],
-              ["02", "Sucursal", "Tu punto principal"],
+              ["02", "Ubicación", "Local físico o negocio en línea"],
               ["03", "Honduras", "Fiscal y patronal después"],
             ].map(([number,title,meta]) => (
               <div key={number} className="rounded-2xl border border-white/10 bg-white/5 p-4">
@@ -61,14 +64,37 @@ export default async function OnboardingPage({
           {params.error ? <div className="mt-5 rounded-2xl bg-red-50 px-4 py-3 text-sm font-medium text-red-700">{params.error}</div> : null}
 
           <form action={createOrganization} className="mt-7 grid gap-5 md:grid-cols-2">
-            <label className="block text-sm font-semibold md:col-span-2">Nombre comercial<input name="tradeName" required className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] px-4 py-3.5" /></label>
-            <label className="block text-sm font-semibold md:col-span-2">Razón social / nombre legal<input name="legalName" required className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] px-4 py-3.5" /></label>
-            <label className="block text-sm font-semibold">RTN <span className="font-normal text-neutral-400">(opcional)</span><input name="rtn" maxLength={20} className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] px-4 py-3.5" /></label>
-            <label className="block text-sm font-semibold">Tipo de organización<select name="type" defaultValue="company" className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] bg-white px-4 py-3.5"><option value="company">Sociedad</option><option value="sole_trader">Comerciante individual</option><option value="independent_professional">Profesional independiente</option><option value="ngo">ONG / asociación</option><option value="other">Otro</option></select></label>
-            <label className="block text-sm font-semibold">Departamento<select name="department" defaultValue="Francisco Morazán" className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] bg-white px-4 py-3.5">{departments.map((department) => <option key={department}>{department}</option>)}</select></label>
-            <label className="block text-sm font-semibold">Municipio<input name="municipality" required className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] px-4 py-3.5" /></label>
-            <label className="block text-sm font-semibold md:col-span-2">Dirección de la sucursal principal<textarea name="address" rows={3} className="mt-2 w-full resize-none rounded-2xl border border-[var(--bb-line)] px-4 py-3.5" /></label>
-            <button className="rounded-2xl bg-neutral-950 px-5 py-4 text-sm font-bold text-white hover:bg-neutral-800 md:col-span-2">Crear empresa y abrir Blackbird</button>
+            <label className="block text-sm font-semibold md:col-span-2">
+              Nombre comercial
+              <input name="tradeName" required className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] px-4 py-3.5" />
+            </label>
+
+            <label className="block text-sm font-semibold md:col-span-2">
+              Razón social / nombre legal
+              <input name="legalName" required className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] px-4 py-3.5" />
+            </label>
+
+            <label className="block text-sm font-semibold">
+              RTN <span className="font-normal text-neutral-400">(opcional)</span>
+              <input name="rtn" maxLength={20} className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] px-4 py-3.5" />
+            </label>
+
+            <label className="block text-sm font-semibold">
+              Tipo de organización
+              <select name="type" defaultValue="company" className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] bg-white px-4 py-3.5">
+                <option value="company">Sociedad</option>
+                <option value="sole_trader">Comerciante individual</option>
+                <option value="independent_professional">Profesional independiente</option>
+                <option value="ngo">ONG / asociación</option>
+                <option value="other">Otro</option>
+              </select>
+            </label>
+
+            <BusinessLocationFields departments={departments} />
+
+            <button className="rounded-2xl bg-neutral-950 px-5 py-4 text-sm font-bold text-white hover:bg-neutral-800 md:col-span-2">
+              Crear empresa y abrir Blackbird
+            </button>
           </form>
         </section>
       </div>
