@@ -91,7 +91,7 @@ export async function register(formData: FormData) {
   if (error) {
     if (error.code === "over_email_send_rate_limit") {
       registrationSuccess(
-        "Ya solicitamos un correo de verificación recientemente. Revisa tu bandeja de entrada y correo no deseado para verificar tu cuenta.",
+        "Si este correo corresponde a una cuenta nueva o pendiente de verificación, recibirás un enlace para confirmarla. Si ya habías verificado tu cuenta, puedes iniciar sesión directamente.",
       );
     }
 
@@ -106,7 +106,7 @@ export async function register(formData: FormData) {
   }
 
   registrationSuccess(
-    "Cuenta creada correctamente. Revisa tu correo electrónico y abre el enlace que te enviamos para verificar tu cuenta y continuar.",
+    "Si este correo corresponde a una cuenta nueva, te enviaremos un enlace para verificarla. Si ya tenías una cuenta verificada en Blackbird, puedes iniciar sesión directamente.",
   );
 }
 
