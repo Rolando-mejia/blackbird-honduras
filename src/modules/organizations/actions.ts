@@ -5,24 +5,50 @@ import { z } from "zod";
 import { isSupabaseConfigured } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 
-const onboardingSchema = z.object({
-  tradeName: z.string().trim().min(2, "Escribe el nombre comercial"),
-  legalName: z.string().trim().min(2, "Escribe la razón social o nombre legal"),
-  rtn: z.string().trim().max(20).optional(),
-  type: z.enum([
-    "sole_trader",
-    "company",
-    "independent_professional",
-    "ngo",
-    "other",
-  ]),
-  department: z
-    .string()
-    .trim()
-    .min(2, "Selecciona o escribe el departamento"),
-  municipality: z.string().trim().min(2, "Escribe el municipio"),
-  address: z.string().trim().max(500).optional(),
-});
+const onboardingSchema = z
+  .object({
+    tradeName: z.string().trim().min(2, "Escribe el nombre comercial"),
+    legalName: z.string().trim().min(2, "Escribe la razón social o nombre legal"),
+    rtn: z.string().trim().max(20).optional(),
+    type: z.enum([
+      "sole_trader",
+      "company",
+      "independent_professional",
+      "ngo",
+      "other",
+    ]),
+    isOnline: z.boolean(),
+    department: z.string().trim().optional(),
+    municipality: z.string().trim().optional(),
+    address: z.string().trim().max(500).optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.isOnline) return;
+
+    if (!data.department || data.department.length < 2) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["department"],
+        message: "Selecciona el departamento de tu local principal",
+      });
+    }
+
+    if (!data.municipality || data.municipality.length < 2) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["municipality"],
+        message: "Escribe el municipio de tu local principal",
+      });
+    }
+
+    if (!data.address || data.address.length < 3) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["address"],
+        message: "Escribe la dirección de tu local principal",
+      });
+    }
+  });
 
 function onboardingError(message: string): never {
   redirect(`/onboarding?error=${encodeURIComponent(message)}`);
@@ -33,13 +59,16 @@ export async function createOrganization(formData: FormData) {
     onboardingError("Blackbird DEV todavía no está conectado a Supabase.");
   }
 
+  const isOnline = formData.get("isOnline") === "true";
+
   const parsed = onboardingSchema.safeParse({
     tradeName: formData.get("tradeName"),
     legalName: formData.get("legalName"),
     rtn: formData.get("rtn") || undefined,
     type: formData.get("type"),
-    department: formData.get("department"),
-    municipality: formData.get("municipality"),
+    isOnline,
+    department: formData.get("department") || undefined,
+    municipality: formData.get("municipality") || undefined,
     address: formData.get("address") || undefined,
   });
 
@@ -61,9 +90,9 @@ export async function createOrganization(formData: FormData) {
     p_legal_name: parsed.data.legalName,
     p_rtn: parsed.data.rtn ?? "",
     p_type: parsed.data.type,
-    p_department: parsed.data.department,
-    p_municipality: parsed.data.municipality,
-    p_address: parsed.data.address ?? "",
+    p_department: parsed.data.isOnline ? "" : parsed.data.department ?? "",
+    p_municipality: parsed.data.isOnline ? "" : parsed.data.municipality ?? "",
+    p_address: parsed.data.isOnline ? "" : parsed.data.address ?? "",
   });
 
   if (error) {
