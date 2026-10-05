@@ -64,6 +64,15 @@ No se elimina una empresa por cancelación de suscripción. Sus datos se conserv
 
 Cada sucursal puede tener nombre, código, dirección, departamento, municipio, estado e indicador de sucursal principal.
 
+Blackbird no asumirá que toda empresa tiene una ubicación física. Durante el onboarding el usuario podrá indicar que opera **solo en línea**. En ese caso:
+
+- dirección, departamento y municipio dejan de ser obligatorios;
+- se crea una ubicación principal virtual;
+- la interfaz debe identificarla como **Operación en línea** y no como una dirección pendiente;
+- esta decisión queda registrada para futuras recomendaciones y configuración por rubro.
+
+Los negocios con local físico deberán registrar su ubicación principal. Los modelos híbridos podrán evolucionar después agregando ubicaciones físicas y canales digitales sin cambiar de cuenta.
+
 ## 7. Usuarios y membresías
 
 Starter incluye 5 usuarios. Cada membresía relaciona usuario, empresa, rol, estado, sucursales permitidas y fecha de incorporación. El modelo debe soportar usuarios adicionales como add-on.
