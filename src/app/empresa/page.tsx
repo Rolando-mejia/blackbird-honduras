@@ -46,7 +46,7 @@ export default async function EmpresaPage() {
               ["País", org.country_code],
               ["Moneda", org.currency_code],
               ["Zona horaria", org.timezone],
-              ["Sucursal principal", ctx.branch?.name ?? "Pendiente"],
+              ["Operación principal", ctx.branch?.is_virtual ? "En línea" : ctx.branch?.name ?? "Pendiente"],
             ].map(([label, value]) => (
               <div key={label} className="rounded-2xl bg-[var(--bb-soft)] p-4">
                 <dt className="text-xs font-semibold text-neutral-400">{label}</dt>
