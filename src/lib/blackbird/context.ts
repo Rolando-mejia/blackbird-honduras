@@ -32,7 +32,7 @@ export async function getActiveContext() {
       .single(),
     supabase
       .from("branches")
-      .select("id,name,code,address,department,municipality,is_main,is_active")
+      .select("id,name,code,address,department,municipality,is_main,is_active,is_virtual")
       .eq("organization_id", membership.organization_id)
       .eq("is_active", true)
       .order("is_main", { ascending: false })
