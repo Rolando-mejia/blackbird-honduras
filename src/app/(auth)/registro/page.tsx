@@ -39,7 +39,7 @@ export default async function RegisterPage({
 
             {params.message ? (
               <div className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-4 text-sm text-emerald-800">
-                <p className="font-bold">Revisa tu correo para verificar tu cuenta</p>
+                <p className="font-bold">Cuenta registrada</p>
                 <p className="mt-1 leading-6">{params.message}</p>
               </div>
             ) : null}
