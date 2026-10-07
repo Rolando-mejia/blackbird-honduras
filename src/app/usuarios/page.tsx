@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { AppShell } from "@/components/app-shell";
 import { getActiveContext } from "@/lib/blackbird/context";
 import { can, getRolePermissionKeys } from "@/lib/blackbird/permissions";
@@ -15,6 +16,9 @@ export default async function UsuariosPage({
   const params = await searchParams;
   const ctx = await getActiveContext();
   const permissionKeys = await getRolePermissionKeys(ctx.supabase, ctx.role);
+  const canView = can(permissionKeys, "core.users.view");
+  if (!canView) redirect("/dashboard");
+
   const canInvite = can(permissionKeys, "core.users.invite");
   const canManage = can(permissionKeys, "core.users.manage");
 
