@@ -10,6 +10,13 @@ export async function getActiveContext() {
   const { data: authData, error: authError } = await supabase.auth.getUser();
   if (authError || !authData.user) redirect("/login");
 
+  const { data: aal } =
+    await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+
+  if (aal?.nextLevel === "aal2" && aal.currentLevel !== "aal2") {
+    redirect("/mfa");
+  }
+
   const { data: memberships, error: membershipError } = await supabase
     .from("organization_members")
     .select("id,organization_id,role_id,status,job_title,all_branches")
