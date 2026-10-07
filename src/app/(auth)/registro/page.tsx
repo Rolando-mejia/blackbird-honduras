@@ -46,6 +46,7 @@ export default async function RegisterPage({
 
             {!params.message ? (
               <form action={register} className="mt-7 space-y-4">
+                {params.invite ? <input type="hidden" name="invite" value={params.invite} /> : null}
                 <label className="block text-sm font-semibold">
                   Nombre completo
                   <input name="fullName" autoComplete="name" required className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] px-4 py-3.5" />
