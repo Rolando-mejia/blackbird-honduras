@@ -15,6 +15,7 @@ const navItems = [
   { href: "/modulos", label: "Módulos", icon: "▦" },
   { href: "/auditoria", label: "Auditoría", icon: "≡" },
   { href: "/configuracion", label: "Configuración", icon: "⚙" },
+  { href: "/seguridad", label: "Seguridad", icon: "◉" },
 ] as const;
 
 export function AppShell({
