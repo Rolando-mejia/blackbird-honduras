@@ -87,6 +87,10 @@ export default async function ConfiguracionPage({
       organizationName={ctx.organization.trade_name}
       branchName={ctx.branch?.name}
       roleName={ctx.role?.name}
+      organizationId={ctx.organization.id}
+      branchId={ctx.branch?.id}
+      organizationOptions={ctx.organizationOptions}
+      branchOptions={ctx.branchOptions}
     >
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
