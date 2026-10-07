@@ -111,6 +111,53 @@ export async function register(formData: FormData) {
   );
 }
 
+export async function acceptInvitation(formData: FormData) {
+  if (!isSupabaseConfigured()) {
+    fail("/login", "Blackbird DEV todavía no está conectado.");
+  }
+
+  const token = String(formData.get("token") ?? "");
+  if (!token) {
+    fail("/login", "La invitación no es válida.");
+  }
+
+  const supabase = await createClient();
+  const { data: authData } = await supabase.auth.getUser();
+
+  if (!authData.user) {
+    redirect("/login?invite=" + encodeURIComponent(token));
+  }
+
+  const { data, error } = await supabase.rpc(
+    "accept_blackbird_user_invitation",
+    { p_token: token },
+  );
+
+  if (error) {
+    console.error("Blackbird invitation acceptance error", error);
+    const message = error.message.includes("EMAIL_MISMATCH")
+      ? "Esta invitación corresponde a otro correo."
+      : "La invitación ya no es válida o ha vencido.";
+    redirect("/login?error=" + encodeURIComponent(message));
+  }
+
+  const { cookies } = await import("next/headers");
+  const store = await cookies();
+
+  if (data) {
+    store.set("bb_active_org", String(data), {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 365,
+    });
+    store.delete("bb_active_branch");
+  }
+
+  redirect("/dashboard");
+}
+
 export async function logout() {
   if (isSupabaseConfigured()) {
     const supabase = await createClient();
