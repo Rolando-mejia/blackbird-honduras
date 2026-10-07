@@ -55,6 +55,10 @@ export default async function DashboardPage() {
       organizationName={ctx.organization.trade_name}
       branchName={ctx.branch?.name}
       roleName={ctx.role?.name}
+      organizationId={ctx.organization.id}
+      branchId={ctx.branch?.id}
+      organizationOptions={ctx.organizationOptions}
+      branchOptions={ctx.branchOptions}
     >
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
