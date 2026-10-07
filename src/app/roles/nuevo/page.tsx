@@ -16,6 +16,15 @@ const moduleLabels: Record<string, string> = {
   reports: "Reportería",
 };
 
+type PermissionRow = {
+  id: string;
+  key: string;
+  module_key: string;
+  name: string | null;
+  description: string | null;
+  sort_order: number;
+};
+
 export default async function NuevoRolPage() {
   const ctx = await getActiveContext();
 
@@ -23,12 +32,13 @@ export default async function NuevoRolPage() {
     redirect("/roles?error=Solo%20el%20Propietario%20puede%20crear%20roles.");
   }
 
-  const { data: permissions = [] } = await ctx.supabase
+  const permissionResult = await ctx.supabase
     .from("permissions")
     .select("id,key,module_key,name,description,sort_order")
     .order("sort_order");
 
-  const moduleKeys = Array.from(
+  const permissions = (permissionResult.data ?? []) as PermissionRow[];
+  const moduleKeys: string[] = Array.from(
     new Set(permissions.map((permission) => permission.module_key)),
   );
 
