@@ -50,6 +50,11 @@ export default async function LoginPage({
                 Contraseña
                 <input name="password" type="password" autoComplete="current-password" minLength={8} required className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] bg-white px-4 py-3.5" />
               </label>
+              <div className="-mt-1 text-right">
+                <Link href="/recuperar-contrasena" className="text-sm font-bold text-[var(--bb-accent-strong)]">
+                  ¿Olvidaste tu contraseña?
+                </Link>
+              </div>
               <button className="w-full rounded-2xl bg-neutral-950 px-4 py-4 text-sm font-bold text-white transition hover:bg-neutral-800">Entrar a Blackbird</button>
             </form>
 
