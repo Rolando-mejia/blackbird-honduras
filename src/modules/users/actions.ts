@@ -234,3 +234,28 @@ export async function updateRoleAccess(formData: FormData) {
   revalidatePath("/auditoria");
   redirect("/roles?message=" + encodeURIComponent("Rol actualizado."));
 }
+
+
+export async function duplicateRoleAccess(formData: FormData) {
+  const ctx = await getActiveContext();
+  const roleId = String(formData.get("roleId") ?? "");
+  const newName = String(formData.get("newName") ?? "").trim();
+
+  if (!roleId || newName.length < 2) {
+    redirect("/roles?error=" + encodeURIComponent("Escribe el nombre de la copia."));
+  }
+
+  const { error } = await ctx.supabase.rpc("duplicate_blackbird_role", {
+    p_role_id: roleId,
+    p_new_name: newName,
+  });
+
+  if (error) {
+    console.error("Blackbird duplicate role error", error);
+    redirect("/roles?error=" + encodeURIComponent("No pudimos duplicar el rol."));
+  }
+
+  revalidatePath("/roles");
+  revalidatePath("/auditoria");
+  redirect("/roles?message=" + encodeURIComponent("Rol duplicado."));
+}
