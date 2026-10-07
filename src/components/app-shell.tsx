@@ -69,10 +69,52 @@ export function AppShell({
           <div className="px-2 py-2"><BlackbirdBrand /></div>
 
           <div className="mt-6 rounded-2xl border border-[var(--bb-line)] bg-[var(--bb-soft)] p-3">
-            <p className="truncate text-sm font-bold">{organizationName}</p>
-            <p className="mt-1 truncate text-xs text-neutral-500">
-              {branchName ?? "Sucursal principal"} · {roleName ?? "Usuario"}
-            </p>
+            {organizationOptions.length > 1 && organizationId ? (
+              <form action={switchOrganization}>
+                <input type="hidden" name="returnTo" value={activePath} />
+                <select
+                  name="organizationId"
+                  defaultValue={organizationId}
+                  onChange={undefined}
+                  className="w-full rounded-xl border border-[var(--bb-line)] bg-white px-3 py-2 text-sm font-bold"
+                >
+                  {organizationOptions.map((organization) => (
+                    <option key={organization.id} value={organization.id}>
+                      {organization.name}
+                    </option>
+                  ))}
+                </select>
+                <button className="mt-2 w-full rounded-xl bg-neutral-950 px-3 py-2 text-xs font-bold text-white">
+                  Cambiar empresa
+                </button>
+              </form>
+            ) : (
+              <p className="truncate text-sm font-bold">{organizationName}</p>
+            )}
+
+            {branchOptions.length > 1 && branchId ? (
+              <form action={switchBranch} className="mt-3">
+                <input type="hidden" name="returnTo" value={activePath} />
+                <select
+                  name="branchId"
+                  defaultValue={branchId}
+                  className="w-full rounded-xl border border-[var(--bb-line)] bg-white px-3 py-2 text-xs font-semibold"
+                >
+                  {branchOptions.map((branch) => (
+                    <option key={branch.id} value={branch.id}>
+                      {branch.name}
+                    </option>
+                  ))}
+                </select>
+                <button className="mt-2 w-full rounded-xl bg-white px-3 py-2 text-xs font-bold text-neutral-700">
+                  Cambiar sucursal
+                </button>
+              </form>
+            ) : (
+              <p className="mt-1 truncate text-xs text-neutral-500">
+                {branchName ?? "Sucursal principal"} · {roleName ?? "Usuario"}
+              </p>
+            )}
           </div>
 
           <div className="mt-6 flex-1">{nav}</div>
