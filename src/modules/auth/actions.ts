@@ -15,8 +15,14 @@ function fail(path: string, message: string): never {
   redirect(`${path}?error=${encodeURIComponent(message)}`);
 }
 
-function registrationSuccess(message: string): never {
-  redirect(`/registro?message=${encodeURIComponent(message)}`);
+function registrationResult(
+  key: "message" | "error",
+  message: string,
+  invite?: string,
+): never {
+  const params = new URLSearchParams({ [key]: message });
+  if (invite) params.set("invite", invite);
+  redirect(`/registro?${params.toString()}`);
 }
 
 export async function login(formData: FormData) {
@@ -28,10 +34,12 @@ export async function login(formData: FormData) {
     .object({
       email: emailSchema,
       password: passwordSchema,
+      invite: z.string().trim().optional(),
     })
     .safeParse({
       email: formData.get("email"),
       password: formData.get("password"),
+      invite: String(formData.get("invite") ?? "") || undefined,
     });
 
   if (!parsed.success) {
@@ -39,10 +47,17 @@ export async function login(formData: FormData) {
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithPassword(parsed.data);
+  const { error } = await supabase.auth.signInWithPassword({
+    email: parsed.data.email,
+    password: parsed.data.password,
+  });
 
   if (error) {
     fail("/login", "No pudimos iniciar sesión con esos datos.");
+  }
+
+  if (parsed.data.invite) {
+    redirect(`/onboarding?invite=${encodeURIComponent(parsed.data.invite)}`);
   }
 
   redirect("/");
@@ -58,15 +73,21 @@ export async function register(formData: FormData) {
       fullName: z.string().trim().min(3, "Escribe tu nombre completo"),
       email: emailSchema,
       password: passwordSchema,
+      invite: z.string().trim().optional(),
     })
     .safeParse({
       fullName: formData.get("fullName"),
       email: formData.get("email"),
       password: formData.get("password"),
+      invite: String(formData.get("invite") ?? "") || undefined,
     });
 
   if (!parsed.success) {
-    fail("/registro", parsed.error.issues[0]?.message ?? "Datos inválidos");
+    registrationResult(
+      "error",
+      parsed.error.issues[0]?.message ?? "Datos inválidos",
+      String(formData.get("invite") ?? "") || undefined,
+    );
   }
 
   const requestHeaders = await headers();
@@ -76,6 +97,10 @@ export async function register(formData: FormData) {
     "http://localhost:3000";
   const origin = rawOrigin.replace(/\/+$/, "");
 
+  const nextPath = parsed.data.invite
+    ? `/onboarding?invite=${encodeURIComponent(parsed.data.invite)}`
+    : "/onboarding";
+
   const supabase = await createClient();
   const { data, error } = await supabase.auth.signUp({
     email: parsed.data.email,
@@ -84,30 +109,34 @@ export async function register(formData: FormData) {
       data: {
         full_name: parsed.data.fullName,
       },
-      emailRedirectTo: `${origin}/auth/confirm?next=/onboarding`,
+      emailRedirectTo: `${origin}/auth/confirm?next=${encodeURIComponent(nextPath)}`,
     },
   });
 
   if (error) {
     if (error.code === "over_email_send_rate_limit") {
-      fail(
-        "/registro",
+      registrationResult(
+        "error",
         "No pudimos enviar el correo de verificación en este momento. El servicio de correo alcanzó un límite temporal y la cuenta no fue creada. Espera un poco y vuelve a intentarlo.",
+        parsed.data.invite,
       );
     }
 
-    fail(
-      "/registro",
+    registrationResult(
+      "error",
       "No pudimos crear la cuenta. Revisa los datos e inténtalo nuevamente.",
+      parsed.data.invite,
     );
   }
 
   if (data.session) {
-    redirect("/onboarding");
+    redirect(nextPath);
   }
 
-  registrationSuccess(
+  registrationResult(
+    "message",
     "Si este correo corresponde a una cuenta nueva, te enviaremos un enlace para verificarla. Si ya tenías una cuenta verificada en Blackbird, puedes iniciar sesión directamente.",
+    parsed.data.invite,
   );
 }
 
