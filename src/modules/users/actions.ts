@@ -183,3 +183,25 @@ export async function updateOrganizationMember(formData: FormData) {
   revalidatePath("/auditoria");
   usersSuccess("Acceso del usuario actualizado.");
 }
+
+
+export async function createRoleFromUsersModule(formData: FormData) {
+  const ctx = await getActiveContext();
+  const name = String(formData.get("name") ?? "").trim();
+  if (name.length < 2) usersFail("Escribe el nombre del rol.");
+
+  const { error } = await ctx.supabase.rpc("create_blackbird_role", {
+    p_organization_id: ctx.organization.id,
+    p_name: name,
+    p_description: String(formData.get("description") ?? "").trim(),
+    p_permission_keys: formData.getAll("permissionKeys").map(String),
+  });
+
+  if (error) {
+    console.error("Blackbird create role error", error);
+    usersFail("No pudimos crear el rol.");
+  }
+
+  revalidatePath("/roles");
+  redirect("/roles?message=Rol%20creado%20correctamente.");
+}
