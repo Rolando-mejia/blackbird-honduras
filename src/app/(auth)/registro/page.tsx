@@ -6,7 +6,7 @@ import { RegisterSubmitButton } from "@/components/register-submit-button";
 export default async function RegisterPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string; message?: string }>;
+  searchParams: Promise<{ error?: string; message?: string; invite?: string }>;
 }) {
   const params = await searchParams;
 
