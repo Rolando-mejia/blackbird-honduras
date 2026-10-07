@@ -1,8 +1,10 @@
+import Link from "next/link";
 import { AppShell } from "@/components/app-shell";
 import { getActiveContext } from "@/lib/blackbird/context";
 
 export default async function RolesPage() {
   const ctx = await getActiveContext();
+  const isOwner = Boolean(ctx.role?.is_owner_role);
 
   const { data: roles } = await ctx.supabase
     .from("roles")
@@ -24,11 +26,22 @@ export default async function RolesPage() {
       organizationName={ctx.organization.trade_name}
       branchName={ctx.branch?.name}
       roleName={ctx.role?.name}
+      organizationId={ctx.organization.id}
+      branchId={ctx.branch?.id}
+      organizationOptions={ctx.organizationOptions}
+      branchOptions={ctx.branchOptions}
     >
-      <div>
-        <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--bb-accent)]">Seguridad</p>
-        <h1 className="mt-2 text-4xl font-black tracking-[-0.045em]">Roles y permisos</h1>
-        <p className="mt-2 text-sm text-neutral-500">Control granular siguiendo el principio de mínimo privilegio.</p>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--bb-accent)]">Seguridad</p>
+          <h1 className="mt-2 text-4xl font-black tracking-[-0.045em]">Roles y permisos</h1>
+          <p className="mt-2 text-sm text-neutral-500">Control granular siguiendo el principio de mínimo privilegio.</p>
+        </div>
+        {isOwner ? (
+          <Link href="/roles/nuevo" className="rounded-2xl bg-neutral-950 px-5 py-3 text-center text-sm font-bold text-white">
+            + Crear rol
+          </Link>
+        ) : null}
       </div>
 
       <div className="mt-8 grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
@@ -44,6 +57,11 @@ export default async function RolesPage() {
                   </span>
                 </div>
                 <p className="mt-2 text-xs leading-5 text-neutral-500">{role.description || "Rol configurable para la organización."}</p>
+                {isOwner && !role.is_owner_role ? (
+                  <Link href={`/roles/${role.id}`} className="mt-3 inline-flex rounded-xl bg-[var(--bb-soft)] px-3 py-2 text-xs font-bold">
+                    Editar rol y permisos
+                  </Link>
+                ) : null}
               </div>
             ))}
           </div>
