@@ -35,7 +35,7 @@ export default async function LoginPage({
             <div className="mb-10 lg:hidden"><BlackbirdBrand /></div>
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--bb-accent)]">Bienvenido</p>
             <h2 className="mt-3 text-4xl font-black tracking-[-0.045em]">Iniciar sesión</h2>
-            <p className="mt-3 text-sm leading-6 text-neutral-500">Accede a tu empresa desde un solo lugar.</p>
+            <p className="mt-3 text-sm leading-6 text-neutral-500">{params.invite ? "Inicia sesión para aceptar tu invitación a una empresa." : "Accede a tu empresa desde un solo lugar."}</p>
 
             {params.error ? <div className="mt-6 rounded-2xl bg-red-50 px-4 py-3 text-sm font-medium text-red-700">{params.error}</div> : null}
             {params.message ? <div className="mt-6 rounded-2xl bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">{params.message}</div> : null}
@@ -54,7 +54,7 @@ export default async function LoginPage({
             </form>
 
             <div className="mt-7 rounded-2xl bg-[var(--bb-soft)] p-4 text-center text-sm text-neutral-600">
-              ¿Aún no tienes cuenta? <Link href="/registro" className="font-bold text-neutral-950">Crear empresa</Link>
+              ¿Aún no tienes cuenta? <Link href={params.invite ? `/registro?invite=${encodeURIComponent(params.invite)}` : "/registro"} className="font-bold text-neutral-950">{params.invite ? "Crear cuenta" : "Crear empresa"}</Link>
             </div>
           </div>
         </section>
