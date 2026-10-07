@@ -20,6 +20,10 @@ export default async function EmpresaPage() {
       organizationName={org.trade_name}
       branchName={ctx.branch?.name}
       roleName={ctx.role?.name}
+      organizationId={ctx.organization.id}
+      branchId={ctx.branch?.id}
+      organizationOptions={ctx.organizationOptions}
+      branchOptions={ctx.branchOptions}
     >
       <div>
         <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--bb-accent)]">Core</p>
