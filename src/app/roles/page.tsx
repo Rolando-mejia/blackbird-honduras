@@ -1,9 +1,13 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { AppShell } from "@/components/app-shell";
 import { getActiveContext } from "@/lib/blackbird/context";
+import { can, getRolePermissionKeys } from "@/lib/blackbird/permissions";
 
 export default async function RolesPage() {
   const ctx = await getActiveContext();
+  const permissionKeys = await getRolePermissionKeys(ctx.supabase, ctx.role);
+  if (!can(permissionKeys, "core.roles.view")) redirect("/dashboard");
   const isOwner = Boolean(ctx.role?.is_owner_role);
 
   const { data: roles } = await ctx.supabase
