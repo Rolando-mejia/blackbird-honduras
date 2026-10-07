@@ -205,3 +205,32 @@ export async function createRoleFromUsersModule(formData: FormData) {
   revalidatePath("/roles");
   redirect("/roles?message=Rol%20creado%20correctamente.");
 }
+
+
+export async function updateRoleAccess(formData: FormData) {
+  const ctx = await getActiveContext();
+  const roleId = String(formData.get("roleId") ?? "");
+  const name = String(formData.get("name") ?? "").trim();
+
+  if (!roleId || name.length < 2) {
+    redirect("/roles?error=" + encodeURIComponent("Revisa los datos del rol."));
+  }
+
+  const { error } = await ctx.supabase.rpc("update_blackbird_role", {
+    p_role_id: roleId,
+    p_name: name,
+    p_description: String(formData.get("description") ?? "").trim(),
+    p_is_active: formData.get("isActive") === "true",
+    p_permission_keys: formData.getAll("permissionKeys").map(String),
+  });
+
+  if (error) {
+    console.error("Blackbird update role error", error);
+    redirect("/roles?error=" + encodeURIComponent("No pudimos actualizar el rol."));
+  }
+
+  revalidatePath("/roles");
+  revalidatePath("/usuarios");
+  revalidatePath("/auditoria");
+  redirect("/roles?message=" + encodeURIComponent("Rol actualizado."));
+}
