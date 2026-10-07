@@ -1,6 +1,10 @@
 import Link from "next/link";
 import { logout } from "@/modules/auth/actions";
 import { BlackbirdBrand } from "@/components/blackbird-mark";
+import {
+  switchBranch,
+  switchOrganization,
+} from "@/modules/context/actions";
 
 const navItems = [
   { href: "/dashboard", label: "Inicio", icon: "⌂" },
@@ -20,6 +24,10 @@ export function AppShell({
   organizationName,
   branchName,
   roleName,
+  organizationId,
+  branchId,
+  organizationOptions = [],
+  branchOptions = [],
 }: {
   children: React.ReactNode;
   activePath: string;
@@ -27,6 +35,10 @@ export function AppShell({
   organizationName: string;
   branchName?: string | null;
   roleName?: string | null;
+  organizationId?: string;
+  branchId?: string | null;
+  organizationOptions?: Array<{ id: string; name: string }>;
+  branchOptions?: Array<{ id: string; name: string; isMain: boolean; isVirtual: boolean }>;
 }) {
   const firstName = fullName.split(" ")[0];
 
