@@ -6,16 +6,16 @@ export default async function RolesPage() {
 
   const { data: roles } = await ctx.supabase
     .from("roles")
-    .select("id,name,description,is_system,organization_id")
-    .or("organization_id.eq." + ctx.organization.id + ",organization_id.is.null")
-    .order("is_system", { ascending: false })
+    .select("id,name,description,is_system,is_owner_role,is_active,organization_id")
+    .eq("organization_id", ctx.organization.id)
+    .order("is_owner_role", { ascending: false })
     .order("name");
 
   const { data: permissions } = await ctx.supabase
     .from("permissions")
-    .select("id,key,module_key,description")
-    .order("module_key")
-    .order("key");
+    .select("id,key,module_key,name,description,sort_order")
+    .order("sort_order")
+    .order("name");
 
   return (
     <AppShell
@@ -40,7 +40,7 @@ export default async function RolesPage() {
                 <div className="flex items-center justify-between gap-3">
                   <p className="font-bold">{role.name}</p>
                   <span className="rounded-full bg-neutral-100 px-2.5 py-1 text-[10px] font-black uppercase tracking-wide text-neutral-500">
-                    {role.is_system ? "Sistema" : "Empresa"}
+                    {role.is_owner_role ? "Protegido" : role.is_active ? "Activo" : "Inactivo"}
                   </span>
                 </div>
                 <p className="mt-2 text-xs leading-5 text-neutral-500">{role.description || "Rol configurable para la organización."}</p>
@@ -59,15 +59,15 @@ export default async function RolesPage() {
           </div>
 
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
-            {(permissions ?? []).slice(0, 12).map((permission) => (
+            {(permissions ?? []).map((permission) => (
               <div key={permission.id} className="rounded-2xl bg-[var(--bb-soft)] p-4">
                 <p className="text-[10px] font-black uppercase tracking-wide text-neutral-400">{permission.module_key}</p>
-                <p className="mt-1 text-sm font-bold">{permission.key}</p>
+                <p className="mt-1 text-sm font-bold">{permission.name ?? permission.key}</p>
                 <p className="mt-1 text-xs leading-5 text-neutral-500">{permission.description}</p>
               </div>
             ))}
           </div>
-          <p className="mt-5 text-xs text-neutral-400">El editor visual para asignar permisos por rol se implementará en el siguiente incremento.</p>
+          <p className="mt-5 text-xs text-neutral-400">Los permisos ya están activos en la base de seguridad y se agrupan por módulo para mantener la configuración comprensible.</p>
         </section>
       </div>
     </AppShell>
