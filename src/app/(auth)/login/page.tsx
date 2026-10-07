@@ -5,7 +5,7 @@ import { BlackbirdBrand, BlackbirdMark } from "@/components/blackbird-mark";
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string; message?: string }>;
+  searchParams: Promise<{ error?: string; message?: string; invite?: string }>;
 }) {
   const params = await searchParams;
 
