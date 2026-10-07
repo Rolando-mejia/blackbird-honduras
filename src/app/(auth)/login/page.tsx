@@ -41,6 +41,7 @@ export default async function LoginPage({
             {params.message ? <div className="mt-6 rounded-2xl bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">{params.message}</div> : null}
 
             <form action={login} className="mt-8 space-y-5">
+              {params.invite ? <input type="hidden" name="invite" value={params.invite} /> : null}
               <label className="block text-sm font-semibold">
                 Correo
                 <input name="email" type="email" autoComplete="email" required className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] bg-white px-4 py-3.5" />
