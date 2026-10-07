@@ -64,7 +64,7 @@ export default async function RegisterPage({
             ) : (
               <div className="mt-7">
                 <Link
-                  href="/login"
+                  href={params.invite ? `/login?invite=${encodeURIComponent(params.invite)}` : "/login"}
                   className="block w-full rounded-2xl bg-neutral-950 px-4 py-4 text-center text-sm font-bold text-white hover:bg-neutral-800"
                 >
                   Ir a iniciar sesión
@@ -73,7 +73,7 @@ export default async function RegisterPage({
             )}
 
             <p className="mt-6 text-center text-sm text-neutral-500">
-              Ya tengo cuenta. <Link href="/login" className="font-bold text-neutral-950">Iniciar sesión</Link>
+              Ya tengo cuenta. <Link href={params.invite ? `/login?invite=${encodeURIComponent(params.invite)}` : "/login"} className="font-bold text-neutral-950">Iniciar sesión</Link>
             </p>
           </div>
         </section>
