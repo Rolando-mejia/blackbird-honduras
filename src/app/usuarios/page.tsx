@@ -118,6 +118,10 @@ export default async function UsuariosPage({
       organizationName={ctx.organization.trade_name}
       branchName={ctx.branch?.name}
       roleName={ctx.role?.name}
+      organizationId={ctx.organization.id}
+      branchId={ctx.branch?.id}
+      organizationOptions={ctx.organizationOptions}
+      branchOptions={ctx.branchOptions}
     >
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
