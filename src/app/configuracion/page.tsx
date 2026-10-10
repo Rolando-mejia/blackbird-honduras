@@ -14,45 +14,6 @@ import {
 const inputClass =
   "mt-2 w-full rounded-2xl border border-[var(--bb-line)] bg-white px-4 py-3.5 text-sm";
 
-function StepHeader({
-  number,
-  title,
-  description,
-  status,
-  done,
-}: {
-  number: string;
-  title: string;
-  description: string;
-  status: string;
-  done: boolean;
-}) {
-  return (
-    <div className="flex items-start justify-between gap-4">
-      <div className="flex gap-3">
-        <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-2xl text-xs font-black ${
-          done
-            ? "bg-emerald-50 text-emerald-700"
-            : "bg-[var(--bb-accent-soft)] text-[var(--bb-accent-strong)]"
-        }`}>
-          {number}
-        </span>
-        <div>
-          <h2 className="text-lg font-black tracking-[-0.025em]">{title}</h2>
-          <p className="mt-1 text-sm text-neutral-500">{description}</p>
-        </div>
-      </div>
-      <span className={`rounded-full px-2.5 py-1 text-[11px] font-bold ${
-        done
-          ? "bg-emerald-50 text-emerald-700"
-          : "bg-amber-50 text-amber-700"
-      }`}>
-        {status}
-      </span>
-    </div>
-  );
-}
-
 export default async function ConfiguracionPage({
   searchParams,
 }: {
