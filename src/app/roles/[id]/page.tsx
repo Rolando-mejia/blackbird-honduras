@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { AppShell } from "@/components/app-shell";
+import { CollapsibleFormSection } from "@/components/collapsible-form-section";
 import { getActiveContext } from "@/lib/blackbird/context";
 import {
   duplicateRoleAccess,
@@ -105,7 +106,12 @@ export default async function EditarRolPage({
       <form action={updateRoleAccess} className="mt-7 space-y-5">
         <input type="hidden" name="roleId" value={role.id} />
 
-        <section className="rounded-3xl border border-[var(--bb-line)] bg-white p-5 shadow-sm">
+        <CollapsibleFormSection
+          eyebrow="Datos"
+          title="Información del rol"
+          description="Nombre, descripción y estado."
+          defaultOpen
+        >
           <div className="grid gap-4 md:grid-cols-2">
             <label className="text-sm font-semibold">
               Nombre
@@ -135,17 +141,16 @@ export default async function EditarRolPage({
             />
             Rol activo
           </label>
-        </section>
+        </CollapsibleFormSection>
 
         {moduleKeys.map((moduleKey) => (
-          <fieldset
+          <CollapsibleFormSection
             key={moduleKey}
-            className="rounded-3xl border border-[var(--bb-line)] bg-white p-5 shadow-sm"
+            eyebrow="Permisos"
+            title={moduleLabels[moduleKey] ?? moduleKey}
+            description="Abre esta sección para revisar o modificar los permisos."
           >
-            <legend className="px-2 text-base font-black">
-              {moduleLabels[moduleKey] ?? moduleKey}
-            </legend>
-            <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
               {permissions
                 .filter((permission) => permission.module_key === moduleKey)
                 .map((permission) => (
@@ -171,7 +176,7 @@ export default async function EditarRolPage({
                   </label>
                 ))}
             </div>
-          </fieldset>
+          </CollapsibleFormSection>
         ))}
 
         <button className="rounded-2xl bg-neutral-950 px-6 py-4 text-sm font-black text-white">
