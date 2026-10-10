@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { AppShell } from "@/components/app-shell";
+import { CollapsibleFormSection } from "@/components/collapsible-form-section";
 import { getActiveContext } from "@/lib/blackbird/context";
 import { can, getRolePermissionKeys } from "@/lib/blackbird/permissions";
 import {
@@ -176,97 +177,76 @@ export default async function UsuariosPage({
           <summary className="cursor-pointer list-none font-black">
             + Invitar usuario
           </summary>
-          <form action={createUserInvitation} className="mt-5 grid gap-4 md:grid-cols-2">
-            <label className="text-sm font-semibold">
-              Nombre completo
-              <input
-                name="fullName"
-                required
-                className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] px-4 py-3"
-              />
-            </label>
-            <label className="text-sm font-semibold">
-              Correo
-              <input
-                name="email"
-                type="email"
-                required
-                className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] px-4 py-3"
-              />
-            </label>
-            <label className="text-sm font-semibold">
-              Teléfono
-              <input
-                name="phone"
-                className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] px-4 py-3"
-              />
-            </label>
-            <label className="text-sm font-semibold">
-              Cargo / puesto
-              <input
-                name="jobTitle"
-                placeholder="Ej. Vendedor, Cajero, Contador"
-                className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] px-4 py-3"
-              />
-            </label>
-            <label className="text-sm font-semibold md:col-span-2">
-              Rol
-              <select
-                name="roleId"
-                required
-                defaultValue=""
-                className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] bg-white px-4 py-3"
-              >
-                <option value="" disabled>Seleccionar rol</option>
-                {roles
-                  .filter((role) => role.is_active && !role.is_owner_role)
-                  .map((role) => (
-                    <option key={role.id} value={role.id}>
-                      {role.name}
-                    </option>
-                  ))}
-              </select>
-            </label>
-
-            <div className="rounded-2xl bg-[var(--bb-soft)] p-4 md:col-span-2">
-              <label className="flex items-center gap-3 text-sm font-bold">
-                <input
-                  type="checkbox"
-                  name="allBranches"
-                  value="true"
-                  defaultChecked
-                  className="h-4 w-4"
-                />
-                Acceso a todas las sucursales autorizadas por el plan
-              </label>
-              <div className="mt-4 grid gap-2 sm:grid-cols-2">
-                {branches.map((branch) => (
-                  <label
-                    key={branch.id}
-                    className="flex items-center gap-3 rounded-xl bg-white px-3 py-2 text-sm"
-                  >
-                    <input
-                      type="checkbox"
-                      name="branchIds"
-                      value={branch.id}
-                      defaultChecked={branch.is_main}
-                    />
-                    {branch.name}
-                  </label>
-                ))}
+          <form action={createUserInvitation} className="mt-5 space-y-4">
+            <CollapsibleFormSection
+              eyebrow="Paso 1"
+              title="Datos del usuario"
+              description="Información básica de la persona que tendrá acceso."
+              defaultOpen
+            >
+              <div className="grid gap-4 md:grid-cols-2">
+                <label className="text-sm font-semibold">
+                  Nombre completo
+                  <input name="fullName" required className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] px-4 py-3" />
+                </label>
+                <label className="text-sm font-semibold">
+                  Correo
+                  <input name="email" type="email" required className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] px-4 py-3" />
+                </label>
+                <label className="text-sm font-semibold">
+                  Teléfono
+                  <input name="phone" className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] px-4 py-3" />
+                </label>
+                <label className="text-sm font-semibold">
+                  Cargo / puesto
+                  <input name="jobTitle" placeholder="Ej. Vendedor, Cajero, Contador" className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] px-4 py-3" />
+                </label>
               </div>
-              <p className="mt-3 text-xs text-neutral-500">
-                Si desmarcas “todas”, Blackbird usará únicamente las sucursales seleccionadas.
-              </p>
-            </div>
+            </CollapsibleFormSection>
+
+            <CollapsibleFormSection
+              eyebrow="Paso 2"
+              title="Rol y sucursales"
+              description="Define qué podrá hacer y dónde tendrá acceso."
+            >
+              <div className="grid gap-4">
+                <label className="text-sm font-semibold">
+                  Rol
+                  <select name="roleId" required defaultValue="" className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] bg-white px-4 py-3">
+                    <option value="" disabled>Seleccionar rol</option>
+                    {roles
+                      .filter((role) => role.is_active && !role.is_owner_role)
+                      .map((role) => (
+                        <option key={role.id} value={role.id}>{role.name}</option>
+                      ))}
+                  </select>
+                </label>
+
+                <div className="rounded-2xl bg-[var(--bb-soft)] p-4">
+                  <label className="flex items-center gap-3 text-sm font-bold">
+                    <input type="checkbox" name="allBranches" value="true" defaultChecked className="h-4 w-4" />
+                    Acceso a todas las sucursales autorizadas por el plan
+                  </label>
+                  <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                    {branches.map((branch) => (
+                      <label key={branch.id} className="flex items-center gap-3 rounded-xl bg-white px-3 py-2 text-sm">
+                        <input type="checkbox" name="branchIds" value={branch.id} defaultChecked={branch.is_main} />
+                        {branch.name}
+                      </label>
+                    ))}
+                  </div>
+                  <p className="mt-3 text-xs text-neutral-500">
+                    Si desmarcas “todas”, Blackbird usará únicamente las sucursales seleccionadas.
+                  </p>
+                </div>
+              </div>
+            </CollapsibleFormSection>
 
             <button
               disabled={usedSeats >= userLimit}
-              className="rounded-2xl bg-neutral-950 px-5 py-3.5 text-sm font-bold text-white disabled:bg-neutral-300 md:col-span-2 md:w-fit"
+              className="rounded-2xl bg-neutral-950 px-5 py-3.5 text-sm font-bold text-white disabled:bg-neutral-300"
             >
-              {usedSeats >= userLimit
-                ? "Límite de usuarios alcanzado"
-                : "Crear invitación"}
+              {usedSeats >= userLimit ? "Límite de usuarios alcanzado" : "Crear invitación"}
             </button>
           </form>
         </details>
