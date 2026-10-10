@@ -6,6 +6,7 @@ import { acceptInvitation } from "@/modules/auth/actions";
 import { BlackbirdBrand } from "@/components/blackbird-mark";
 import { AuthThemeSwitcher } from "@/components/theme-switcher";
 import { BusinessLocationFields } from "@/components/business-location-fields";
+import { CollapsibleFormSection } from "@/components/collapsible-form-section";
 
 const departments = [
   "Atlántida", "Choluteca", "Colón", "Comayagua", "Copán", "Cortés", "El Paraíso",
@@ -194,57 +195,67 @@ export default async function OnboardingPage({
             </div>
           ) : null}
 
-          <form
-            action={createOrganization}
-            className="mt-7 grid gap-5 md:grid-cols-2"
-          >
-            <label className="block text-sm font-semibold md:col-span-2">
-              Nombre comercial
-              <input
-                name="tradeName"
-                required
-                className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] px-4 py-3.5"
-              />
-            </label>
+          <form action={createOrganization} className="mt-7 space-y-4">
+            <CollapsibleFormSection
+              eyebrow="Paso 1"
+              title="Identidad de la empresa"
+              description="Nombre, tipo de organización y datos fiscales básicos."
+              defaultOpen
+            >
+              <div className="grid gap-5 md:grid-cols-2">
+                <label className="block text-sm font-semibold md:col-span-2">
+                  Nombre comercial
+                  <input
+                    name="tradeName"
+                    required
+                    className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] px-4 py-3.5"
+                  />
+                </label>
 
-            <label className="block text-sm font-semibold md:col-span-2">
-              Razón social / nombre legal
-              <input
-                name="legalName"
-                required
-                className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] px-4 py-3.5"
-              />
-            </label>
+                <label className="block text-sm font-semibold md:col-span-2">
+                  Razón social / nombre legal
+                  <input
+                    name="legalName"
+                    required
+                    className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] px-4 py-3.5"
+                  />
+                </label>
 
-            <label className="block text-sm font-semibold">
-              RTN <span className="font-normal text-neutral-400">(opcional)</span>
-              <input
-                name="rtn"
-                maxLength={20}
-                className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] px-4 py-3.5"
-              />
-            </label>
+                <label className="block text-sm font-semibold">
+                  RTN <span className="font-normal text-neutral-400">(opcional)</span>
+                  <input
+                    name="rtn"
+                    maxLength={20}
+                    className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] px-4 py-3.5"
+                  />
+                </label>
 
-            <label className="block text-sm font-semibold">
-              Tipo de organización
-              <select
-                name="type"
-                defaultValue="company"
-                className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] bg-white px-4 py-3.5"
-              >
-                <option value="company">Sociedad</option>
-                <option value="sole_trader">Comerciante individual</option>
-                <option value="independent_professional">
-                  Profesional independiente
-                </option>
-                <option value="ngo">ONG / asociación</option>
-                <option value="other">Otro</option>
-              </select>
-            </label>
+                <label className="block text-sm font-semibold">
+                  Tipo de organización
+                  <select
+                    name="type"
+                    defaultValue="company"
+                    className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] bg-white px-4 py-3.5"
+                  >
+                    <option value="company">Sociedad</option>
+                    <option value="sole_trader">Comerciante individual</option>
+                    <option value="independent_professional">Profesional independiente</option>
+                    <option value="ngo">ONG / asociación</option>
+                    <option value="other">Otro</option>
+                  </select>
+                </label>
+              </div>
+            </CollapsibleFormSection>
 
-            <BusinessLocationFields departments={departments} />
+            <CollapsibleFormSection
+              eyebrow="Paso 2"
+              title="Ubicación y forma de operación"
+              description="Indica si tienes local físico o si el negocio opera en línea."
+            >
+              <BusinessLocationFields departments={departments} />
+            </CollapsibleFormSection>
 
-            <button className="rounded-2xl bg-neutral-950 px-5 py-4 text-sm font-bold text-white hover:bg-neutral-800 md:col-span-2">
+            <button className="w-full rounded-2xl bg-neutral-950 px-5 py-4 text-sm font-bold text-white hover:bg-neutral-800">
               Crear empresa y abrir Blackbird
             </button>
           </form>
