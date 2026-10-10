@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { logout } from "@/modules/auth/actions";
 import { BlackbirdBrand } from "@/components/blackbird-mark";
+import { ThemeSwitcher } from "@/components/theme-switcher";
 import {
   switchBranch,
   switchOrganization,
@@ -121,6 +122,9 @@ export function AppShell({
           <div className="mt-6 flex-1">{nav}</div>
 
           <div className="border-t border-[var(--bb-line)] pt-4">
+            <div className="mb-3 px-1">
+              <ThemeSwitcher />
+            </div>
             <p className="px-3 text-xs text-neutral-400">Sesión de {firstName}</p>
             <form action={logout} className="mt-2">
               <button className="w-full rounded-2xl px-3 py-2.5 text-left text-sm font-semibold text-neutral-600 hover:bg-neutral-100">
@@ -154,6 +158,9 @@ export function AppShell({
                     <p className="mt-1 truncate text-xs text-neutral-500">{branchName ?? "Sucursal principal"} · {roleName ?? "Usuario"}</p>
                   </div>
                   {nav}
+                  <div className="mt-3 border-t border-[var(--bb-line)] pt-3">
+                    <ThemeSwitcher />
+                  </div>
                   <form action={logout} className="mt-3 border-t border-[var(--bb-line)] pt-3">
                     <button className="w-full rounded-2xl px-3 py-2.5 text-left text-sm font-semibold text-neutral-600">Cerrar sesión</button>
                   </form>
@@ -161,6 +168,7 @@ export function AppShell({
               </details>
 
               <div className="hidden items-center gap-2 lg:flex">
+                <ThemeSwitcher compact />
                 <span className="rounded-full border border-[var(--bb-line)] bg-white px-3 py-2 text-xs font-semibold text-neutral-600">HN · HNL</span>
                 <span className="grid h-10 w-10 place-items-center rounded-full bg-[var(--bb-ink)] text-xs font-bold text-white">{firstName.slice(0, 2).toUpperCase()}</span>
               </div>
