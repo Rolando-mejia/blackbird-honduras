@@ -3,6 +3,7 @@ import { register } from "@/modules/auth/actions";
 import { BlackbirdBrand } from "@/components/blackbird-mark";
 import { AuthThemeSwitcher } from "@/components/theme-switcher";
 import { RegisterSubmitButton } from "@/components/register-submit-button";
+import { CollapsibleFormSection } from "@/components/collapsible-form-section";
 
 export default async function RegisterPage({
   searchParams,
@@ -49,18 +50,36 @@ export default async function RegisterPage({
             {!params.message ? (
               <form action={register} className="mt-7 space-y-4">
                 {params.invite ? <input type="hidden" name="invite" value={params.invite} /> : null}
-                <label className="block text-sm font-semibold">
-                  Nombre completo
-                  <input name="fullName" autoComplete="name" required className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] px-4 py-3.5" />
-                </label>
-                <label className="block text-sm font-semibold">
-                  Correo
-                  <input name="email" type="email" autoComplete="email" required className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] px-4 py-3.5" />
-                </label>
-                <label className="block text-sm font-semibold">
-                  Contraseña
-                  <input name="password" type="password" autoComplete="new-password" minLength={8} required className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] px-4 py-3.5" />
-                </label>
+
+                <CollapsibleFormSection
+                  eyebrow="Paso 1"
+                  title="Datos de la cuenta"
+                  description="Nombre y correo con el que accederás a Blackbird."
+                  defaultOpen
+                >
+                  <div className="grid gap-4">
+                    <label className="block text-sm font-semibold">
+                      Nombre completo
+                      <input name="fullName" autoComplete="name" required className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] px-4 py-3.5" />
+                    </label>
+                    <label className="block text-sm font-semibold">
+                      Correo
+                      <input name="email" type="email" autoComplete="email" required className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] px-4 py-3.5" />
+                    </label>
+                  </div>
+                </CollapsibleFormSection>
+
+                <CollapsibleFormSection
+                  eyebrow="Paso 2"
+                  title="Seguridad"
+                  description="Crea la contraseña de tu cuenta."
+                >
+                  <label className="block text-sm font-semibold">
+                    Contraseña
+                    <input name="password" type="password" autoComplete="new-password" minLength={8} required className="mt-2 w-full rounded-2xl border border-[var(--bb-line)] px-4 py-3.5" />
+                  </label>
+                </CollapsibleFormSection>
+
                 <RegisterSubmitButton />
               </form>
             ) : (
