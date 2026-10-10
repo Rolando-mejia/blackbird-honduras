@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BlackbirdBrand } from "@/components/blackbird-mark";
+import { AuthThemeSwitcher } from "@/components/theme-switcher";
 import { requestPasswordReset } from "@/modules/auth/actions";
 
 export default async function RecuperarContrasenaPage({
@@ -11,6 +12,7 @@ export default async function RecuperarContrasenaPage({
 
   return (
     <main className="min-h-screen bg-[var(--bb-canvas)] p-4 sm:p-6">
+      <AuthThemeSwitcher />
       <div className="mx-auto flex min-h-[calc(100vh-2rem)] max-w-xl items-center">
         <section className="w-full rounded-[2rem] border border-[var(--bb-line)] bg-white p-6 shadow-sm sm:p-9">
           <BlackbirdBrand />
