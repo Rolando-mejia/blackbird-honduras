@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { register } from "@/modules/auth/actions";
 import { BlackbirdBrand } from "@/components/blackbird-mark";
+import { AuthThemeSwitcher } from "@/components/theme-switcher";
 import { RegisterSubmitButton } from "@/components/register-submit-button";
 
 export default async function RegisterPage({
@@ -12,6 +13,7 @@ export default async function RegisterPage({
 
   return (
     <main className="min-h-screen bg-neutral-950 p-4 sm:p-6">
+      <AuthThemeSwitcher />
       <div className="mx-auto grid min-h-[calc(100vh-2rem)] max-w-6xl overflow-hidden rounded-[2rem] bg-white lg:grid-cols-[0.9fr_1.1fr]">
         <aside className="relative hidden overflow-hidden bg-[var(--bb-accent)] p-10 text-white lg:flex lg:flex-col lg:justify-between">
           <div className="absolute -bottom-40 -left-40 h-96 w-96 rounded-full border-[46px] border-white/20" />
