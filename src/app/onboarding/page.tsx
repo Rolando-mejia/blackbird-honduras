@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createOrganization } from "@/modules/organizations/actions";
 import { acceptInvitation } from "@/modules/auth/actions";
 import { BlackbirdBrand } from "@/components/blackbird-mark";
+import { AuthThemeSwitcher } from "@/components/theme-switcher";
 import { BusinessLocationFields } from "@/components/business-location-fields";
 
 const departments = [
@@ -46,6 +47,7 @@ export default async function OnboardingPage({
     if (previewError || !preview?.valid) {
       return (
         <main className="min-h-screen bg-[var(--bb-canvas)] p-4 sm:p-6 lg:p-8">
+      <AuthThemeSwitcher />
           <div className="mx-auto max-w-xl rounded-[2rem] border border-[var(--bb-line)] bg-white p-7 shadow-sm sm:p-9">
             <BlackbirdBrand />
             <p className="mt-10 text-xs font-bold uppercase tracking-[0.18em] text-red-500">
