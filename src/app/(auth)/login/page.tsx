@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { login } from "@/modules/auth/actions";
 import { BlackbirdBrand, BlackbirdMark } from "@/components/blackbird-mark";
+import { AuthThemeSwitcher } from "@/components/theme-switcher";
 
 export default async function LoginPage({
   searchParams,
@@ -11,6 +12,7 @@ export default async function LoginPage({
 
   return (
     <main className="min-h-screen bg-[var(--bb-canvas)] p-4 sm:p-6">
+      <AuthThemeSwitcher />
       <div className="mx-auto grid min-h-[calc(100vh-2rem)] max-w-6xl overflow-hidden rounded-[2rem] border border-[var(--bb-line)] bg-white shadow-sm lg:grid-cols-[1.05fr_0.95fr]">
         <section className="relative hidden overflow-hidden bg-neutral-950 p-10 text-white lg:flex lg:flex-col lg:justify-between">
           <div className="absolute -right-32 -top-32 h-80 w-80 rounded-full border-[42px] border-[var(--bb-accent)] opacity-90" />
