@@ -8,6 +8,7 @@ export function CollapsibleFormSection({
   defaultOpen = false,
   children,
   className = "",
+  id,
 }: {
   title: string;
   description?: string;
@@ -16,9 +17,11 @@ export function CollapsibleFormSection({
   defaultOpen?: boolean;
   children: ReactNode;
   className?: string;
+  id?: string;
 }) {
   return (
     <details
+      id={id}
       className={`bb-collapse rounded-3xl border border-[var(--bb-line)] bg-white shadow-sm ${className}`}
       open={defaultOpen}
     >
