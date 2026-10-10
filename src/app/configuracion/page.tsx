@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { AppShell } from "@/components/app-shell";
 import { ThemeSwitcher } from "@/components/theme-switcher";
+import { CollapsibleFormSection } from "@/components/collapsible-form-section";
 import { getActiveContext } from "@/lib/blackbird/context";
 import { getOrganizationSetup } from "@/lib/blackbird/setup";
 import {
@@ -166,14 +167,15 @@ export default async function ConfiguracionPage({
       </div>
 
       <div className="mt-7 space-y-5">
-        <section id="company" className="scroll-mt-24 rounded-3xl border border-[var(--bb-line)] bg-white p-5 shadow-sm sm:p-6">
-          <StepHeader
-            number="01"
-            title="Perfil empresarial"
-            description="Datos principales que verá Blackbird en toda la operación."
-            status={byKey.get("company")?.statusLabel ?? "Listo"}
-            done={true}
-          />
+        <CollapsibleFormSection
+          id="company"
+          eyebrow="01"
+          title="Perfil empresarial"
+          description="Datos principales que verá Blackbird en toda la operación."
+          status={byKey.get("company")?.statusLabel ?? "Listo"}
+          defaultOpen={setup.nextStep?.key === "company"}
+          className="scroll-mt-24"
+        >
           <form action={saveCompanySetup} className="mt-6 grid gap-4 md:grid-cols-2">
             <label className="text-sm font-semibold">
               Nombre comercial
@@ -197,16 +199,17 @@ export default async function ConfiguracionPage({
               Guardar perfil empresarial
             </button>
           </form>
-        </section>
+        </CollapsibleFormSection>
 
-        <section id="tax" className="scroll-mt-24 rounded-3xl border border-[var(--bb-line)] bg-white p-5 shadow-sm sm:p-6">
-          <StepHeader
-            number="02"
-            title="RTN y datos fiscales"
-            description="Configúralos si ya estás registrado. Si aún no tienes RTN, puedes continuar."
-            status={byKey.get("tax")?.statusLabel ?? "Pendiente"}
-            done={byKey.get("tax")?.done ?? false}
-          />
+        <CollapsibleFormSection
+          id="tax"
+          eyebrow="02"
+          title="RTN y datos fiscales"
+          description="Configúralos si ya estás registrado. Si aún no tienes RTN, puedes continuar."
+          status={byKey.get("tax")?.statusLabel ?? "Pendiente"}
+          defaultOpen={setup.nextStep?.key === "tax"}
+          className="scroll-mt-24"
+        >
           <form action={saveTaxSetup} className="mt-6 grid gap-4 md:grid-cols-2">
             <label className="text-sm font-semibold">
               RTN
@@ -270,16 +273,17 @@ export default async function ConfiguracionPage({
               </button>
             </div>
           </form>
-        </section>
+        </CollapsibleFormSection>
 
-        <section id="cai" className="scroll-mt-24 rounded-3xl border border-[var(--bb-line)] bg-white p-5 shadow-sm sm:p-6">
-          <StepHeader
-            number="03"
-            title="CAI"
-            description="Registra la autorización únicamente si ya cuentas con ella."
-            status={byKey.get("cai")?.statusLabel ?? "Pendiente"}
-            done={byKey.get("cai")?.done ?? false}
-          />
+        <CollapsibleFormSection
+          id="cai"
+          eyebrow="03"
+          title="CAI"
+          description="Registra la autorización únicamente si ya cuentas con ella."
+          status={byKey.get("cai")?.statusLabel ?? "Pendiente"}
+          defaultOpen={setup.nextStep?.key === "cai"}
+          className="scroll-mt-24"
+        >
           <form action={saveCaiSetup} className="mt-6 grid gap-4 md:grid-cols-2">
             <label className="text-sm font-semibold md:col-span-2">
               CAI
@@ -381,16 +385,17 @@ export default async function ConfiguracionPage({
               </button>
             </div>
           </form>
-        </section>
+        </CollapsibleFormSection>
 
-        <section id="employer" className="scroll-mt-24 rounded-3xl border border-[var(--bb-line)] bg-white p-5 shadow-sm sm:p-6">
-          <StepHeader
-            number="04"
-            title="Perfil patronal"
-            description="Úsalo cuando la empresa tenga empleados y necesite preparar RRHH y planilla."
-            status={byKey.get("employer")?.statusLabel ?? "Pendiente"}
-            done={byKey.get("employer")?.done ?? false}
-          />
+        <CollapsibleFormSection
+          id="employer"
+          eyebrow="04"
+          title="Perfil patronal"
+          description="Úsalo cuando la empresa tenga empleados y necesite preparar RRHH y planilla."
+          status={byKey.get("employer")?.statusLabel ?? "Pendiente"}
+          defaultOpen={setup.nextStep?.key === "employer"}
+          className="scroll-mt-24"
+        >
           <form action={saveEmployerSetup} className="mt-6 grid gap-4 md:grid-cols-2">
             <label className="text-sm font-semibold">
               Representante
@@ -448,7 +453,7 @@ export default async function ConfiguracionPage({
               </button>
             </div>
           </form>
-        </section>
+        </CollapsibleFormSection>
       </div>
 
       <p className="mt-6 text-xs leading-5 text-neutral-400">
