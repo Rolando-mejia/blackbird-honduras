@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { AppShell } from "@/components/app-shell";
+import { ThemeSwitcher } from "@/components/theme-switcher";
 import { getActiveContext } from "@/lib/blackbird/context";
 import { getOrganizationSetup } from "@/lib/blackbird/setup";
 import {
@@ -121,6 +122,26 @@ export default async function ConfiguracionPage({
           {params.message}
         </div>
       ) : null}
+
+      <section id="appearance" className="mt-7 rounded-3xl border border-[var(--bb-line)] bg-white p-5 shadow-sm sm:p-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.14em] text-neutral-400">
+              Apariencia
+            </p>
+            <h2 className="mt-2 text-xl font-black tracking-[-0.03em]">
+              Tema de Blackbird
+            </h2>
+            <p className="mt-2 max-w-xl text-sm leading-6 text-neutral-500">
+              Elige modo claro, oscuro o deja que Blackbird siga automáticamente la configuración de tu dispositivo.
+            </p>
+          </div>
+          <ThemeSwitcher />
+        </div>
+        <p className="mt-4 text-xs leading-5 text-neutral-400">
+          La preferencia se guarda en este dispositivo y se aplica a toda la interfaz.
+        </p>
+      </section>
 
       <div className="mt-7 grid gap-3 sm:grid-cols-4">
         {setup.steps.map((step, index) => (
